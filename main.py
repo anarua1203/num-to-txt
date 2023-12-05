@@ -6,16 +6,15 @@ from typing import Union, Optional
 import os
 import openai
 import json
-
 from dotenv import load_dotenv
+
 load_dotenv()
 
 API_URL = os.environ['API_URL']
 PORT = os.environ['PORT']
 os.environ["OPENAI_API_KEY"] = os.environ['OPENAI_KEY']
+
 client = openai.OpenAI()
-
-
 app = FastAPI()
 
 class ParamsInput(BaseModel):
@@ -38,7 +37,6 @@ async def post_num_to_english(params_input: ParamsInput)-> NumberOutput:
 async def post_num_to_english_gpt(params_input: ParamsInput)-> NumberOutput:
     return convert_number_to_english_gpt(params_input.number, params_input.lang)
 
-
 def convert_number_to_english(number, language):
     try:
         num_in_english = num2words(number, lang=language).replace('-', ' ')
@@ -46,25 +44,18 @@ def convert_number_to_english(number, language):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)} ")
     
-
 def convert_number_to_english_gpt(number, language):
     try:
         num_txt_prompt = f'write this number in text: {number}, in this language: {language}'
-
-        
         chat_completion = client.chat.completions.create(
-        model="gpt-3.5-turbo", 
+        model="gpt-3.5-turbo",
         messages=[{"role":"system","content":f"{num_txt_prompt}==>"}],
         temperature=0.3,
         )
-
         reply = chat_completion.choices[0].message.content
-        
-        print('reply: ', reply)
         return  {"status": "ok", "num_in_english": reply}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)} ")
-
-
+    
 if __name__ == "__main__":
     uvicorn.run(app, host=API_URL, port=int(PORT))

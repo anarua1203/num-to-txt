@@ -1,7 +1,4 @@
-ARG ImageID=ubuntu:20.04
-
-FROM $ImageID
-
+FROM --platform=linux/amd64 ubuntu:20.04
 
 ENV PATH="/ruta/miniconda3/bin:${PATH}"
 ARG PATH="/ruta/miniconda3/bin:${PATH}"
