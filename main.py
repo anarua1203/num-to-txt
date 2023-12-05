@@ -12,7 +12,7 @@ load_dotenv()
 
 API_URL = os.environ['API_URL']
 PORT = os.environ['PORT']
-openai.api_key = os.environ['OPENAI_KEY']
+os.environ["OPENAI_API_KEY"] = os.environ['OPENAI_KEY']
 client = openai.OpenAI()
 
 
@@ -52,7 +52,7 @@ def convert_number_to_english_gpt(number, language):
         num_txt_prompt = f'write this number in text: {number}, in this language: {language}'
 
         
-        chat_completion = client.chat.completitions.create(
+        chat_completion = client.chat.completions.create(
         model="gpt-3.5-turbo", 
         messages=[{"role":"system","content":f"{num_txt_prompt}==>"}],
         temperature=0.3,
