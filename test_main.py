@@ -23,15 +23,12 @@ def test_get_num_to_english_custom_lang():
 def test_invalid_number():
     response = client.get("/num_to_english?number=invalid")
     assert response.status_code == 500
-    # assert "value is not a valid integer" in response.text
 
 def test_missing_number():
     response = client.get("/num_to_english")
     assert response.status_code == 422
-    # assert "field required" in response.text
 
 def test_post_missing_number():
     data = {"key": "value"}
     response = client.post("/num_to_english", json=data)
     assert response.status_code == 422
-    # assert "field required" in response.text
