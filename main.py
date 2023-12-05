@@ -1,11 +1,12 @@
-from fastapi import FastAPI, HTTPException, Query, Depends
+from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
 from num2words import num2words
-import uvicorn
 from typing import Union, Optional
+import uvicorn
 import os
 import openai
 from dotenv import load_dotenv
+import logging
 
 load_dotenv()
 
@@ -16,6 +17,12 @@ os.environ["OPENAI_API_KEY"] = os.environ['OPENAI_KEY']
 client = openai.OpenAI()
 app = FastAPI()
 
+
+logging.basicConfig(
+    filename='app.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 class ParamsInput(BaseModel):
     number: Union[int, str]
     lang: Optional[str] = 'en'
@@ -77,8 +84,11 @@ def convert_number_to_english(number, language):
     """
     try:
         num_in_english = num2words(number, lang=language).replace('-', ' ')
-        return {"status": "ok", "num_in_english": num_in_english}
+        result = {"status": "ok", "num_in_english": num_in_english}
+        logging.info(f"Converted {number} to {num_in_english} in language {language}")
+        return result
     except Exception as e:
+        logging.error(f"Error converting {number} to English: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)} ")
 
 def convert_number_to_english_gpt(number, language):
@@ -100,8 +110,11 @@ def convert_number_to_english_gpt(number, language):
             temperature=0.3,
         )
         reply = chat_completion.choices[0].message.content
-        return {"status": "ok", "num_in_english": reply}
+        result = {"status": "ok", "num_in_english": reply}
+        logging.info(f"Converted {number} to {reply} in language {language} using GPT-3")
+        return result
     except Exception as e:
+        logging.error(f"Error converting {number} to English using GPT-3: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)} ")
 
 if __name__ == "__main__":
