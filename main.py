@@ -5,7 +5,6 @@ import uvicorn
 from typing import Union, Optional
 import os
 import openai
-import json
 from dotenv import load_dotenv
 
 load_dotenv()
