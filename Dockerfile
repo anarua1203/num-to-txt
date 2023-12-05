@@ -16,7 +16,7 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-py39_4.12.0-Linux-x86_64
     && sh Miniconda3-py39_4.12.0-Linux-x86_64.sh -b -p /ruta/miniconda3 \
     && rm -f Miniconda3-py39_4.12.0-Linux-x86_64.sh
 
-RUN conda create -y -n dl python=3.11
+RUN conda create -y -n num-txt python=3.11
 
 COPY . num_to_text/
 
@@ -29,4 +29,4 @@ RUN /bin/bash -c "cd num_to_text \
     && pip install -r requirements.txt"
 
 
-CMD ["/bin/bash","-c","cd num_to_text/ && source activate num-txt && python app.py"]
+CMD ["/bin/bash","-c","cd num_to_text/ && source activate num-txt && python main.py"]
