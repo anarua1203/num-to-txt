@@ -32,3 +32,4 @@ def test_post_missing_number():
     data = {"key": "value"}
     response = client.post("/num_to_english", json=data)
     assert response.status_code == 422
+    

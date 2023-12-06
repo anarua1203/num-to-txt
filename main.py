@@ -17,7 +17,6 @@ os.environ["OPENAI_API_KEY"] = os.environ['OPENAI_KEY']
 client = openai.OpenAI()
 app = FastAPI()
 
-
 logging.basicConfig(
     filename='app.log',
     level=logging.INFO,

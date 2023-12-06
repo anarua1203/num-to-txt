@@ -25,5 +25,4 @@ RUN /bin/bash -c "cd num_to_text \
     && source activate num-txt \
     && pip install -r requirements.txt"
 
-
 CMD ["/bin/bash","-c","cd num_to_text/ && source activate num-txt && python main.py"]
